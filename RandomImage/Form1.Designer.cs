@@ -54,7 +54,8 @@
             this.lbxRandomAlgorithm.ItemHeight = 12;
             this.lbxRandomAlgorithm.Items.AddRange(new object[] {
             "System.Random",
-            "CRT rnad()"});
+            "CRT rnad()",
+            "MyRand()"});
             this.lbxRandomAlgorithm.Location = new System.Drawing.Point(6, 95);
             this.lbxRandomAlgorithm.Name = "lbxRandomAlgorithm";
             this.lbxRandomAlgorithm.Size = new System.Drawing.Size(120, 76);

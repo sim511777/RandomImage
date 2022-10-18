@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RandomImage {
     public partial class Form1 : Form {
         public Form1() {
@@ -18,6 +20,15 @@ namespace RandomImage {
             lbxRandomAlgorithm.SelectedIndex = 0;
         }
         [DllImport("msvcrt")] public static extern int rand();
+        
+        static int next = 0;
+        public static int MyRand() {
+            next = next * 1103515245 + 12345;
+            return (int)(next / 65536) % 32768;
+        }        
+        public static void MySrand(int seed) {
+            next = seed;
+        }
 
         ImageBuffer imgBuf;
 
@@ -42,6 +53,16 @@ namespace RandomImage {
             }
         }
 
+        private unsafe void RandomImage_MyRand() {
+            for (int y = 0; y < imgBuf.Height; y++) {
+                var ptr = (byte*)imgBuf.Buffer + imgBuf.Step * y;
+                for (int x = 0; x < imgBuf.Width; x++, ptr++) {
+                    int gray = MyRand() % 256;
+                    *ptr = *(byte*)&gray;
+                }
+            }
+        }
+
         private void btnRandom_Click(object sender, EventArgs e) {
             switch (lbxRandomAlgorithm.SelectedIndex) {
                 case 0:
@@ -49,6 +70,9 @@ namespace RandomImage {
                     break;
                 case 1:
                     RandomImage_CRTrand();
+                    break;
+                case 2:
+                    RandomImage_MyRand();
                     break;
             }
             ibxDraw.Redraw();
